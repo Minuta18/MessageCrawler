@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
     rabbitmq-service:
+        # Original: https://habr.com/ru/companies/slurm/articles/704208/
         image: rabbitmq:3-management
         ports:
             - 10002:15672
@@ -13,6 +14,7 @@ services:
             - ./rabbitmq-etc/volume:/var/lib/rabbitmq
 
     nginx-service:
+        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
         image: nginx:latest
         ports:
             - 10000:80
@@ -25,6 +27,7 @@ services:
             - ./nginx-etc/var/www:/var/www
 
     postgresql-database:
+        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
         image: postgres:latest
         env_file:
             - path: ./postgresql-etc/postgres.env
@@ -42,6 +45,7 @@ services:
             start_period: 10s
 
     postgresql-admin:
+        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
         image: dpage/pgadmin4:7.2
         env_file:
             - path: ./postgres-admin-etc/postgres-admin.env

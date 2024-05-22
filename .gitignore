@@ -4,3 +4,4 @@ nginx-etc/sites-enabled/
 rabbitmq-etc/volume
 postgresql-etc/data
 postgres-admin-etc/data
+.venv
