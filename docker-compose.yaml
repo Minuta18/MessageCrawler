@@ -5,13 +5,18 @@ services:
         # Original: https://habr.com/ru/companies/slurm/articles/704208/
         image: rabbitmq:3-management
         ports:
-            - 10002:15672
+            - 15672:15672
             - 5672:5672
+        # expose:
+        #     - 15672:15672
         restart: always
         env_file:
             - ./rabbitmq-etc/rabbitmq.env
         volumes:
             - ./rabbitmq-etc/volume:/var/lib/rabbitmq
+        healthcheck:
+            test: "exit 0"
+            start_period: 20s
 
     nginx-service:
         # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
@@ -26,37 +31,37 @@ services:
             - ./nginx-etc/ssl:/etc/nginx/ssl
             - ./nginx-etc/var/www:/var/www
 
-    postgresql-database:
-        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
-        image: postgres:latest
-        env_file:
-            - path: ./postgresql-etc/postgres.env
-        restart: unless-stopped
-        expose: 
-            - "5432:5432"
-        volumes:
-            - ./postgresql-etc/data:/var/lib/postgresql/data/pgdata
-            - ./postgresql-etc/postgres.conf:/etc/postgresql.conf 
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
-            interval: 10s
-            timeout: 30s
-            retries: 5
-            start_period: 10s
+    # postgresql-database:
+    #     # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
+    #     image: postgres:latest
+    #     env_file:
+    #         - path: ./postgresql-etc/postgres.env
+    #     restart: unless-stopped
+    #     expose: 
+    #         - "5432:5432"
+    #     volumes:
+    #         - ./postgresql-etc/data:/var/lib/postgresql/data/pgdata
+    #         - ./postgresql-etc/postgres.conf:/etc/postgresql.conf 
+    #     healthcheck:
+    #         test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
+    #         interval: 10s
+    #         timeout: 30s
+    #         retries: 5
+    #         start_period: 10s
 
-    postgresql-admin:
-        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
-        image: dpage/pgadmin4:7.2
-        env_file:
-            - path: ./postgres-admin-etc/postgres-admin.env
-        volumes:
-            - ./postgres-admin-etc/data:/var/lib.pgadmin
-        ports:
-            - "10001:80"
-        restart: unless-stopped
-        depends_on:
-            postgresql-database:
-                condition: service_healthy
+    # postgresql-admin:
+    #     # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
+    #     image: dpage/pgadmin4:7.2
+    #     env_file:
+    #         - path: ./postgres-admin-etc/postgres-admin.env
+    #     volumes:
+    #         - ./postgres-admin-etc/data:/var/lib.pgadmin
+    #     ports:
+    #         - "10001:80"
+    #     restart: unless-stopped
+    #     depends_on:
+    #         postgresql-database:
+    #             condition: service_healthy
     
     link-crawler:
         # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
@@ -69,7 +74,7 @@ services:
             - ./link-crawler/link-crawler.env
         depends_on:
             rabbitmq-service:
-                condition: service_started
+                condition: service_healthy
 
     page-worker:
         # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
@@ -81,7 +86,7 @@ services:
         env_file:
             - ./page-worker/page-worker.env
         depends_on:
-            rabbitmq-service:
+            link-crawler:
                 condition: service_started
 
 

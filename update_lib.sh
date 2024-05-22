@@ -1,2 +1,2 @@
-cp -r ./worker-library ./link-crawler
-cp -r ./worker-library ./page-worker
+cp -r ./worker_library ./link-crawler
+cp -r ./worker_library ./page-worker

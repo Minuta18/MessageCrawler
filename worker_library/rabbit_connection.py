@@ -27,7 +27,7 @@ class RabbitConnection:
             exchange='', routing_key=routing, body=body
         )
         
-    def set_on_receive_callback(self, callback: function) -> None:
+    def set_on_receive_callback(self, callback) -> None:
         self._on_receive_callback = callback
         self._rmq_channel.basic_consume(
             queue=self.queue,
@@ -35,7 +35,7 @@ class RabbitConnection:
             on_message_callback=self._on_receive_callback,
         )
         
-    def get_on_receive_callback(self) -> function:
+    def get_on_receive_callback(self):
         return self._on_receive_callback
     
     def run(self) -> None:

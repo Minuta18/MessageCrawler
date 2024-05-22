@@ -1,1 +1,0 @@
-from rabbit_connection import RabbitConnection
