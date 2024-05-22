@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+    rabbitmq-service:
+        image: rabbitmq:latest
+        expose:
+            - 15672:15672
+        hostname: rabbitmq-service
+        restart: always
+        env_file:
+            - ./rabbitmq/rabbitmq.env
+        
