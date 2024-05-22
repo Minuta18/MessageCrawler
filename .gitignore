@@ -5,4 +5,5 @@ rabbitmq-etc/volume
 postgresql-etc/data
 postgres-admin-etc/data
 link-crawler/worker_library/
+page-worker/worker_library
 .venv
