@@ -71,7 +71,18 @@ services:
             rabbitmq-service:
                 condition: service_started
 
-
+    page-worker:
+        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
+        build:
+            context: ./
+            dockerfile: ./page-worker/Dockerfile
+        restart: always
+        command: python3 main.py
+        env_file:
+            - ./page-worker/page-worker.env
+        depends_on:
+            rabbitmq-service:
+                condition: service_started
 
 
 
