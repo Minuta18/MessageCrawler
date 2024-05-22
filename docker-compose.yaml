@@ -57,4 +57,21 @@ services:
         depends_on:
             postgresql-database:
                 condition: service_healthy
-        
+    
+    link-crawler:
+        # Original: https://github.com/Minuta18/MusicSearch/blob/feature-tracks
+        build:
+            context: ./
+            dockerfile: ./link-crawler/Dockerfile
+        restart: always
+        command: python3 main.py
+        env_file:
+            - ./link-crawler/link-crawler.env
+        depends_on:
+            rabbitmq-service:
+                condition: service_started
+
+
+
+
+

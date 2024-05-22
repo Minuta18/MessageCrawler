@@ -1,12 +1,14 @@
 import pika
 
-def do_nothing(): pass
+def do_nothing(ch, method, properties, body): pass
 
 class RabbitConnection:
     '''
     Class representing connection to RabbitMQ server
     
-    Original: https://habr.com/ru/articles/434510/
+    Used: 
+      - https://habr.com/ru/articles/434510/
+      - https://www.rabbitmq.com/tutorials/tutorial-one-python
     '''
     
     def __init__(self, connection_string: str, queue: str):
